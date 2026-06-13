@@ -86,4 +86,8 @@ Section order is enforced by JS priority (`Schedule → Divisions → Pricing �
 
 ## Related repo memory
 
-- Calendar chip rule (also in `~/.claude` global memory): Revco 2s is always grass; Revco 4s is grass or indoor (never sand).
+- **Revco rules** (also in `~/.claude` global memory):
+  - Max format is **4s** — Revco never displays the "Revco" prefix on 6s+ events even if the divisions/name say Reverse Coed.
+  - **Revco 2s** is always **grass**.
+  - **Revco 4s** is **grass** or **indoor** (never sand).
+  - Detection: name regex `/reverse\s*coed|\brev\s*co\b/i` OR any division matching `/reverse\s*coed/i`, gated by `format ≤ 4s`.
