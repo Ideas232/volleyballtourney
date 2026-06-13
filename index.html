@@ -84,7 +84,13 @@ html, body {
   min-height: 100vh;
 }
 
-body { width: 100%; max-width: 420px; margin: 0 auto; }
+body {
+  width: 100%; max-width: 420px; margin: 0 auto;
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+}
 
 /* ============================== Masthead ============================== */
 .masthead {
