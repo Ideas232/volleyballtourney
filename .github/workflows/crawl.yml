@@ -1,0 +1,34 @@
+name: Daily crawl
+
+on:
+  schedule:
+    # 13:00 UTC = 06:00 PT (daylight) / 05:00 PT (standard).
+    - cron: '0 13 * * *'
+  workflow_dispatch:  # allow manual run from the Actions tab
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # required to push changes back to main
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run crawler
+        run: node scripts/crawl.mjs
+
+      - name: Commit and push if events.json changed
+        run: |
+          if git diff --quiet -- data/events.json; then
+            echo "No changes to events.json — nothing to commit."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data/events.json
+          git commit -m "Daily crawl: $(date -u +%Y-%m-%d)"
+          git push
