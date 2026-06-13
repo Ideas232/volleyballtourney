@@ -361,6 +361,26 @@ body { width: 100%; max-width: 420px; margin: 0 auto; }
   color: var(--muted);
   line-height: 1.55;
 }
+.page-foot .foot-line {
+  color: var(--ink-soft);
+  margin-bottom: var(--s2);
+}
+.page-foot .foot-line a {
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
+}
+.page-foot .foot-line a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 0.5px;
+}
+.page-foot .foot-sources { font-size: var(--t12); color: var(--muted); }
+.page-foot .src-list a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+.page-foot .src-list a:hover { color: var(--ink); }
+.page-foot .src-list a + a::before { content: ', '; color: var(--muted); }
 .page-foot .wordmark {
   font-family: var(--sans);
   font-weight: 600;
@@ -971,9 +991,8 @@ body { width: 100%; max-width: 420px; margin: 0 auto; }
 <div class="events"></div>
 
 <footer class="page-foot">
-  <span class="wordmark">Bay Vball</span>
-  Bay Area volleyball tournaments. Sources:
-  <a href="#">NAGVA</a>, <a href="#">TL Sports</a>, <a href="#">FVBL</a>. Updated daily.
+  <div class="foot-line">Volleyball Tourneys in Bay Area · by <a href="https://johnyvino.com" target="_blank" rel="noopener">Johny Vino</a></div>
+  <div class="foot-sources" data-sources>Sources: <span class="src-list"></span></div>
 </footer>
 
 <div class="scrim" aria-hidden="true"></div>
@@ -1747,7 +1766,32 @@ body { width: 100%; max-width: 420px; margin: 0 auto; }
   // Fetch live curated data; replace EVENTS and re-render on success.
   // The shape on disk follows the React `Event` type — transform to the
   // flat shape the prototype uses internally.
-  const SOURCE_NAMES = { nagva: 'NAGVA', tlsports: 'The League Sports', fvbl: 'FVBL', revco: 'Revco', sfdynasty: 'SF Dynasty', noattitudes: 'No Attitudes' };
+  const SOURCE_NAMES = { nagva: 'NAGVA', tlsports: 'The League Sports', fvbl: 'FVBL', revco: 'Revco', sfdynasty: 'SF Dynasty', noattitudes: 'No Attitudes', volleynation: 'VolleyNation', armada: 'Armada' };
+  const SOURCE_HOMES = {
+    nagva: 'https://nagva.com',
+    tlsports: 'https://www.tl-sports.com',
+    fvbl: 'https://www.instagram.com/fvbleague',
+    volleynation: 'https://volleynation.com',
+    noattitudes: 'https://www.noattitudesbvb.com',
+    sfdynasty: 'https://www.sfvbdynasty.com',
+    armada: 'https://volleyballlife.com',
+  };
+  function renderFooterSources(events) {
+    const seen = new Set();
+    events.forEach(e => { if (e.source) seen.add(e.source); });
+    const list = document.querySelector('.page-foot .src-list');
+    if (!list) return;
+    list.innerHTML = '';
+    const ordered = [...seen].sort((a, b) => (SOURCE_NAMES[a] || a).localeCompare(SOURCE_NAMES[b] || b));
+    ordered.forEach(key => {
+      const a = document.createElement('a');
+      a.textContent = SOURCE_NAMES[key] || key;
+      a.href = SOURCE_HOMES[key] || '#';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      list.appendChild(a);
+    });
+  }
   function transformLive(e) {
     const fmt = e.format || '';
     const surf = e.surface || '';
@@ -1797,6 +1841,7 @@ body { width: 100%; max-width: 420px; margin: 0 auto; }
         console.log('[events] loaded ' + EVENTS.length + ' events from data/events.json');
         const sub = document.querySelector('.masthead .subtitle');
         if (sub) sub.dataset.live = '1';
+        renderFooterSources(data.events);
         render();
       } else {
         console.warn('[events] empty or malformed events.json — keeping bundled fallback');
