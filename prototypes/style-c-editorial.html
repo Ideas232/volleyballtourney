@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bay Vball — Style C · Editorial Minimal</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #fafaf9;
+    --ink: #1c1917;
+    --muted: #78716c;
+    --line: #e7e5e4;
+    --accent: #0c4a6e;
+    --orange: #ea580c;
+    --teal: #0891b2;
+    --green: #16a34a;
+  }
+  html, body { background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { width: 390px; min-height: 100vh; margin: 0 auto; padding: 50px 0 24px; }
+
+  .top { padding: 0 28px 16px; display: flex; align-items: baseline; gap: 8px; border-bottom: 0.5px solid var(--ink); margin: 0 28px 8px; padding: 0 0 18px; }
+  .top-wrap { padding: 0 28px; }
+  .month { font-family: Georgia, "Times New Roman", ui-serif, serif; font-size: 36px; font-style: italic; font-weight: 400; letter-spacing: -0.5px; color: var(--ink); }
+  .year { font-family: Georgia, ui-serif, serif; font-size: 18px; color: var(--muted); }
+
+  .day-labels { display: grid; grid-template-columns: repeat(7, 1fr); padding: 0 20px 6px; font-size: 9px; color: var(--muted); text-align: center; letter-spacing: 2px; font-weight: 600; }
+  .grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 0 16px; }
+  .cell { aspect-ratio: 1 / 1.05; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 10px; font-family: Georgia, ui-serif, serif; font-size: 17px; position: relative; }
+  .cell .num { position: relative; z-index: 1; font-weight: 400; color: var(--ink); }
+  .cell.today .num { color: var(--accent); font-weight: 700; }
+  .cell.today::after { content: ""; position: absolute; top: 36px; width: 14px; height: 1px; background: var(--accent); }
+  .cell.selected::before { content: ""; position: absolute; top: 4px; width: 28px; height: 28px; background: var(--accent); }
+  .cell.selected .num { color: #fff; font-weight: 700; }
+  .stripes { display: flex; gap: 2px; margin-top: 6px; height: 3px; position: relative; z-index: 1; }
+  .stripes span { width: 8px; height: 3px; }
+
+  .list { padding: 24px 0 0; }
+  .list-section { padding: 18px 28px; border-bottom: 0.5px solid var(--line); }
+  .list-section:first-child { border-top: 0.5px solid var(--ink); }
+  .day-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; font-weight: 600; margin-bottom: 8px; }
+  .item-title { font-family: Georgia, ui-serif, serif; font-size: 20px; font-weight: 500; line-height: 1.2; color: var(--ink); }
+  .item-title .meta-paren { color: var(--muted); font-style: italic; }
+  .item-meta { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .item-tag-row { margin-top: 8px; display: flex; gap: 6px; }
+  .item-tag { font-size: 10px; letter-spacing: 1px; padding: 2px 6px; border: 0.5px solid var(--ink); color: var(--ink); font-weight: 500; text-transform: uppercase; }
+
+  .head { padding: 32px 28px 12px; }
+  .head h2 { font-family: Georgia, ui-serif, serif; font-size: 22px; font-style: italic; font-weight: 400; }
+</style>
+</head>
+<body>
+  <div class="top-wrap">
+    <div class="top">
+      <span class="month">June</span>
+      <span class="year">2026</span>
+    </div>
+  </div>
+
+  <div class="day-labels">
+    <span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span>
+  </div>
+
+  <div class="grid">
+    <div class="cell"></div>
+    <div class="cell"><span class="num">1</span><div class="stripes"><span style="background:var(--orange)"></span></div></div>
+    <div class="cell"><span class="num">2</span></div>
+    <div class="cell"><span class="num">3</span></div>
+    <div class="cell"><span class="num">4</span></div>
+    <div class="cell"><span class="num">5</span></div>
+    <div class="cell"><span class="num">6</span></div>
+
+    <div class="cell"><span class="num">7</span></div>
+    <div class="cell"><span class="num">8</span></div>
+    <div class="cell"><span class="num">9</span></div>
+    <div class="cell"><span class="num">10</span></div>
+    <div class="cell"><span class="num">11</span><div class="stripes"><span style="background:var(--green)"></span></div></div>
+    <div class="cell today"><span class="num">12</span></div>
+    <div class="cell"><span class="num">13</span></div>
+
+    <div class="cell"><span class="num">14</span><div class="stripes"><span style="background:var(--green)"></span></div></div>
+    <div class="cell"><span class="num">15</span></div>
+    <div class="cell"><span class="num">16</span></div>
+    <div class="cell"><span class="num">17</span></div>
+    <div class="cell"><span class="num">18</span></div>
+    <div class="cell"><span class="num">19</span></div>
+    <div class="cell selected"><span class="num">20</span><div class="stripes"><span style="background:#fff"></span></div></div>
+
+    <div class="cell"><span class="num">21</span><div class="stripes"><span style="background:var(--orange)"></span><span style="background:var(--green)"></span></div></div>
+    <div class="cell"><span class="num">22</span></div>
+    <div class="cell"><span class="num">23</span></div>
+    <div class="cell"><span class="num">24</span></div>
+    <div class="cell"><span class="num">25</span></div>
+    <div class="cell"><span class="num">26</span></div>
+    <div class="cell"><span class="num">27</span></div>
+
+    <div class="cell"><span class="num">28</span><div class="stripes"><span style="background:var(--teal)"></span><span style="background:var(--green)"></span></div></div>
+    <div class="cell"><span class="num">29</span></div>
+    <div class="cell"><span class="num">30</span></div>
+  </div>
+
+  <div class="head"><h2>Saturday, June 20</h2></div>
+
+  <div class="list">
+    <div class="list-section">
+      <div class="day-label">SAT — JUN 20</div>
+      <div class="item-title">NAGVA Pride Classic</div>
+      <div class="item-meta">San Francisco · Kezar Pavilion</div>
+      <div class="item-tag-row">
+        <span class="item-tag">Mixed AA</span>
+        <span class="item-tag">Mixed B</span>
+        <span class="item-tag">6s · $240</span>
+      </div>
+    </div>
+
+    <div class="list-section">
+      <div class="day-label">SUN — JUN 21</div>
+      <div class="item-title">FVBL TLS — Week 6</div>
+      <div class="item-meta">Pleasanton · Foothill HS</div>
+      <div class="item-tag-row">
+        <span class="item-tag">Co-Ed B/BB</span>
+        <span class="item-tag">6s · $60</span>
+      </div>
+    </div>
+
+    <div class="list-section">
+      <div class="day-label">SUN — JUN 21</div>
+      <div class="item-title">NAGVA Pride <span class="meta-paren">(day 2)</span></div>
+      <div class="item-meta">San Francisco · Kezar Pavilion</div>
+      <div class="item-tag-row">
+        <span class="item-tag">Mixed AA</span>
+        <span class="item-tag">Mixed B</span>
+      </div>
+    </div>
+
+    <div class="list-section">
+      <div class="day-label">SUN — JUN 28</div>
+      <div class="item-title">Summer Shootout</div>
+      <div class="item-meta">San Jose Sports Complex</div>
+      <div class="item-tag-row">
+        <span class="item-tag">Open</span>
+        <span class="item-tag">A · BB</span>
+        <span class="item-tag">4s · $180</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
